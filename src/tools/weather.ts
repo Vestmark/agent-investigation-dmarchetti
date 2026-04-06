@@ -19,7 +19,7 @@ export const getWeather = createTool({
   execute: async ({ location }) => {
     const url = `https://wttr.in/${encodeURIComponent(location)}?format=j1`;
     const res = await fetch(url, {
-      headers: { "User-Agent": "stock-monitor/1.0" },
+      headers: { "User-Agent": "agent-investigation-dean/1.0" },
     });
     if (!res.ok) throw new Error(`Weather API returned ${res.status}`);
     const data = await res.json() as Record<string, unknown>;

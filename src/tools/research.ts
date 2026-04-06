@@ -26,7 +26,7 @@ export const fetchCompanyProfile = createTool({
     try {
       const url = `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${encodeURIComponent(symbol)}?modules=assetProfile,defaultKeyStatistics,summaryDetail,price`;
       const res = await fetch(url, {
-        headers: { "User-Agent": "stock-monitor/1.0" },
+        headers: { "User-Agent": "agent-investigation-dean/1.0" },
       });
       if (!res.ok) throw new Error(`Yahoo returned ${res.status}`);
       const data = await res.json() as Record<string, unknown>;
@@ -85,7 +85,7 @@ export const fetchSECFilings = createTool({
       // First, look up CIK from ticker
       const tickerRes = await fetch(
         `https://efts.sec.gov/LATEST/search-index?q=%22${encodeURIComponent(symbol)}%22&dateRange=custom&startdt=2024-01-01&forms=10-K,10-Q,8-K`,
-        { headers: { "User-Agent": "stock-monitor admin@example.com" } }
+        { headers: { "User-Agent": "agent-investigation-dean admin@example.com" } }
       );
 
       // Use full-text search API instead
@@ -98,7 +98,7 @@ export const fetchSECFilings = createTool({
       // Simpler approach: use EDGAR company search
       const companyUrl = `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&company=&CIK=${encodeURIComponent(symbol)}&type=10-K%2C10-Q%2C8-K&dateb=&owner=include&count=${limit}&search_text=&action=getcompany&output=atom`;
       const cRes = await fetch(companyUrl, {
-        headers: { "User-Agent": "stock-monitor admin@example.com", Accept: "application/atom+xml" },
+        headers: { "User-Agent": "agent-investigation-dean admin@example.com", Accept: "application/atom+xml" },
       });
 
       if (!cRes.ok) throw new Error(`EDGAR returned ${cRes.status}`);

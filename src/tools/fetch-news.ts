@@ -71,7 +71,7 @@ export async function fetchNewsForSymbol(
 
   try {
     const res = await fetch(url, {
-      headers: { "User-Agent": "stock-monitor/1.0" },
+      headers: { "User-Agent": "agent-investigation-dean/1.0" },
     });
     if (!res.ok) return { symbol, articles: [] };
     const xml = await res.text();
@@ -107,7 +107,7 @@ export const fetchNews = createTool({
     const url = `https://news.google.com/rss/search?q=${query}&hl=en-US&gl=US&ceid=US:en`;
 
     const res = await fetch(url, {
-      headers: { "User-Agent": "stock-monitor/1.0" },
+      headers: { "User-Agent": "agent-investigation-dean/1.0" },
     });
 
     if (!res.ok) {

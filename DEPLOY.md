@@ -18,7 +18,7 @@ Step-by-step guide to deploy the Stock Monitor app on Northflank with managed Po
 If you haven't already, create a GitHub repo and push:
 
 ```bash
-git remote add origin https://github.com/YOUR_USERNAME/stock-monitor.git
+git remote add origin https://github.com/Vestmark/agent-investigation-dean.git
 git add -A
 git commit -m "Prepare for Northflank deployment"
 git branch -M main
@@ -33,14 +33,14 @@ git push -u origin main
 2. Go to **Account Settings > Git** (left sidebar)
 3. Click **Connect** next to GitHub
 4. Authorize Northflank to access your repositories
-5. Select the `stock-monitor` repo (or grant access to all repos)
+5. Select the `agent-investigation-dean` repo (or grant access to all repos)
 
 ---
 
 ## Step 3: Create a Project
 
 1. From the Northflank dashboard, click **Create Project**
-2. Name it `stock-monitor`
+2. Name it `agent-investigation-dean`
 3. Choose your preferred region (US East recommended for lower Bedrock latency)
 4. Click **Create**
 
@@ -51,7 +51,7 @@ git push -u origin main
 1. Inside your project, click **Add Addon** (or go to **Addons > Create Addon**)
 2. Select **PostgreSQL**
 3. Configure:
-   - **Name**: `stock-monitor-db`
+   - **Name**: `agent-investigation-dean-db`
    - **Version**: 16 (or latest available)
    - **Plan**: Pick based on your needs (the free tier works for testing)
 4. Click **Create**
@@ -65,7 +65,7 @@ Once created, note that Northflank automatically provides connection details. Yo
 
 1. Inside your project, click **Add Service > Combined Service**
 2. Configure the **Build** section:
-   - **Source**: Select your connected GitHub repo (`stock-monitor`)
+   - **Source**: Select your connected GitHub repo (`agent-investigation-dean`)
    - **Branch**: `main`
    - **Build type**: **Dockerfile**
    - **Dockerfile path**: `./Dockerfile` (default)
@@ -106,7 +106,7 @@ Optional variables:
 
 1. Go to your service, click the **Environment** tab
 2. Scroll to **Linked Addons** (or click **Add Link**)
-3. Select the `stock-monitor-db` addon you created
+3. Select the `agent-investigation-dean-db` addon you created
 4. This automatically injects `DATABASE_URL` into your service environment
 5. Northflank also injects individual vars like `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE` — the app only needs `DATABASE_URL`
 6. Click **Update & Restart**
@@ -131,7 +131,7 @@ Optional variables:
 ## Step 9: Set Up a Public Domain (Optional)
 
 1. Go to your service's **Networking** tab
-2. Northflank provides a default URL like `https://stock-monitor-xxxx.northflank.app`
+2. Northflank provides a default URL like `https://agent-investigation-dean-xxxx.northflank.app`
 3. To use a custom domain:
    - Click **Add Custom Domain**
    - Enter your domain (e.g., `monitor.yourdomain.com`)

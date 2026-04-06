@@ -21,7 +21,7 @@ export const getStockPrice = createTool({
     const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1m&range=1d`;
     const response = await fetch(url, {
       headers: {
-        "User-Agent": "stock-monitor/1.0",
+        "User-Agent": "agent-investigation-dean/1.0",
       },
     });
 

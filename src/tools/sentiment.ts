@@ -27,7 +27,7 @@ export const fetchRedditSentiment = createTool({
     try {
       const url = `https://www.reddit.com/r/${sub}/search.json?q=${encodeURIComponent(sym)}&sort=new&restrict_sr=on&limit=15&t=week`;
       const res = await fetch(url, {
-        headers: { "User-Agent": "stock-monitor/1.0 (research bot)" },
+        headers: { "User-Agent": "agent-investigation-dean/1.0 (research bot)" },
       });
       if (!res.ok) throw new Error(`Reddit returned ${res.status}`);
       const data = await res.json() as any;
@@ -79,7 +79,7 @@ export const fetchStockTwitsSentiment = createTool({
     try {
       const url = `https://api.stocktwits.com/api/2/streams/symbol/${encodeURIComponent(sym)}.json`;
       const res = await fetch(url, {
-        headers: { "User-Agent": "stock-monitor/1.0" },
+        headers: { "User-Agent": "agent-investigation-dean/1.0" },
       });
       if (!res.ok) throw new Error(`StockTwits returned ${res.status}`);
       const data = await res.json() as any;

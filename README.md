@@ -1,6 +1,6 @@
-# Stock Monitor
+# Agent Investigation Dean
 
-A real-time stock monitoring dashboard for financial advisors, built with [Mastra.ai](https://mastra.ai) agents on AWS Bedrock. The application demonstrates agentic AI capabilities with 16 specialized agents, a scrollable web UI with live SSE data streaming, and a SQLite-backed portfolio database.
+A real-time stock monitoring dashboard for financial advisors, built with [Mastra.ai](https://mastra.ai) agents on AWS Bedrock. The application demonstrates agentic AI capabilities with 16 specialized agents, a scrollable web UI with live SSE data streaming, and a PostgreSQL-backed portfolio database.
 
 ## Getting Started
 

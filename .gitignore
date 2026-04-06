@@ -1,6 +1,3 @@
 node_modules/
 dist/
 .env
-stock-monitor.db
-stock-monitor.db-shm
-stock-monitor.db-wal
