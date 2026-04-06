@@ -1,17 +1,17 @@
 import { getUniqueSymbols, addSymbolToDb, removeSymbolHoldings } from "./db.js";
 
-export function loadSymbols(): string[] {
+export async function loadSymbols(): Promise<string[]> {
   return getUniqueSymbols();
 }
 
-export function addSymbol(symbol: string): string[] {
+export async function addSymbol(symbol: string): Promise<string[]> {
   const upper = symbol.toUpperCase();
-  addSymbolToDb(upper);
+  await addSymbolToDb(upper);
   return loadSymbols();
 }
 
-export function removeSymbol(symbol: string): string[] {
+export async function removeSymbol(symbol: string): Promise<string[]> {
   const upper = symbol.toUpperCase();
-  removeSymbolHoldings(upper);
+  await removeSymbolHoldings(upper);
   return loadSymbols();
 }

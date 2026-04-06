@@ -1,14 +1,6 @@
 import { Agent } from "@mastra/core/agent";
-import { createAmazonBedrock } from "@ai-sdk/amazon-bedrock";
-import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
+import { bedrockProvider } from "../bedrock.js";
 import { listEvents, createEvent, removeEvent } from "../tools/calendar.js";
-
-const bedrockProvider = createAmazonBedrock({
-  region: process.env.AWS_REGION || "us-east-1",
-  credentialProvider: fromNodeProviderChain({
-    profile: process.env.AWS_PROFILE,
-  }),
-});
 
 export const calendarAgent = new Agent({
   name: "Calendar Agent",

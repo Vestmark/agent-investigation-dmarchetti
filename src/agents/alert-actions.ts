@@ -1,16 +1,8 @@
 import { Agent } from "@mastra/core/agent";
-import { createAmazonBedrock } from "@ai-sdk/amazon-bedrock";
-import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
+import { bedrockProvider } from "../bedrock.js";
 import { listAlerts, createAlert, deleteAlert, checkAlerts } from "../tools/alerts.js";
 import { queryPortfolio, queryPrices } from "../tools/market-query.js";
 import { sendEmail } from "../tools/email.js";
-
-const bedrockProvider = createAmazonBedrock({
-  region: process.env.AWS_REGION || "us-east-1",
-  credentialProvider: fromNodeProviderChain({
-    profile: process.env.AWS_PROFILE,
-  }),
-});
 
 export const alertActionsAgent = new Agent({
   name: "Alert Actions Agent",

@@ -1,13 +1,10 @@
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
-import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
 
+// SES client uses default credential chain (env vars in containers, ~/.aws locally)
 const ses = new SESClient({
   region: process.env.AWS_REGION || "us-east-1",
-  credentials: fromNodeProviderChain({
-    profile: process.env.AWS_PROFILE,
-  }),
 });
 
 export const sendEmail = createTool({

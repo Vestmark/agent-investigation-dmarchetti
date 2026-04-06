@@ -15,6 +15,7 @@ import { countdownAgent } from "./agents/countdown.js";
 import { alertActionsAgent } from "./agents/alert-actions.js";
 import { tradeAnalysisAgent } from "./agents/trade-analysis.js";
 import { newsLookupAgent } from "./agents/news-lookup.js";
+import { initDb } from "./db.js";
 import { updateAlertPriceMap } from "./tools/alerts.js";
 import { loadSymbols } from "./symbols.js";
 import { fetchNewsForSymbol } from "./tools/fetch-news.js";
@@ -195,7 +196,7 @@ function printTable(symbols: string[], isInitial: boolean): void {
 }
 
 async function checkPrices(): Promise<void> {
-  const holdingSymbols = loadSymbols();
+  const holdingSymbols = await loadSymbols();
   const symbols = [...new Set([...holdingSymbols, ...INDEX_SYMBOLS])].sort((a, b) =>
     a.replace(/^\^/, "").localeCompare(b.replace(/^\^/, ""))
   );
@@ -349,7 +350,7 @@ function parseNewsResponse(text: string): NewsArticle[] {
 const BATCH_SIZE = 4; // symbols per batch
 
 async function fetchAndAnalyzeNews(): Promise<void> {
-  const symbols = loadSymbols().sort((a, b) =>
+  const symbols = (await loadSymbols()).sort((a, b) =>
     a.replace(/^\^/, "").localeCompare(b.replace(/^\^/, ""))
   );
 
@@ -496,6 +497,7 @@ function scheduleNewsPoll(): void {
 // ============================================================
 
 async function main(): Promise<void> {
+  await initDb();
   startServer(2404);
 
   // Price interval changes
@@ -574,7 +576,7 @@ async function main(): Promise<void> {
     return response.text;
   });
 
-  const symbols = loadSymbols().sort((a, b) =>
+  const symbols = (await loadSymbols()).sort((a, b) =>
     a.replace(/^\^/, "").localeCompare(b.replace(/^\^/, ""))
   );
   console.log(

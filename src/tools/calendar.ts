@@ -18,7 +18,7 @@ export const listEvents = createTool({
     })),
   }),
   execute: async () => {
-    return { events: getCalendarEvents() };
+    return { events: await getCalendarEvents() };
   },
 });
 
@@ -45,7 +45,7 @@ export const createEvent = createTool({
     message: z.string(),
   }),
   execute: async ({ title, description, event_date, event_time, reminder }) => {
-    const event = addCalendarEvent({
+    const event = await addCalendarEvent({
       title,
       description: description ?? "",
       event_date,
@@ -64,7 +64,7 @@ export const removeEvent = createTool({
   }),
   outputSchema: z.object({ message: z.string() }),
   execute: async ({ id }) => {
-    deleteCalendarEvent(id);
+    await deleteCalendarEvent(id);
     return { message: `Event ${id} deleted.` };
   },
 });

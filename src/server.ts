@@ -166,22 +166,22 @@ app.get("/api/logs", (_req: Request, res: Response) => {
 });
 
 // --- Symbols API ---
-app.get("/api/symbols", (_req: Request, res: Response) => {
-  res.json({ symbols: loadSymbols() });
+app.get("/api/symbols", async (_req: Request, res: Response) => {
+  res.json({ symbols: await loadSymbols() });
 });
 
-app.post("/api/symbols", (req: Request, res: Response) => {
+app.post("/api/symbols", async (req: Request, res: Response) => {
   const { symbol } = req.body as { symbol?: string };
   if (!symbol || typeof symbol !== "string") {
     res.status(400).json({ error: "symbol is required" });
     return;
   }
-  const symbols = addSymbol(symbol.trim());
+  const symbols = await addSymbol(symbol.trim());
   res.json({ symbols });
 });
 
-app.delete("/api/symbols/:symbol", (req: Request, res: Response) => {
-  const symbols = removeSymbol(req.params.symbol);
+app.delete("/api/symbols/:symbol", async (req: Request, res: Response) => {
+  const symbols = await removeSymbol(req.params.symbol);
   res.json({ symbols });
 });
 
@@ -268,14 +268,15 @@ app.post("/api/news-refresh", (_req: Request, res: Response) => {
 });
 
 // --- Holdings API ---
-app.get("/api/holdings", (_req: Request, res: Response) => {
-  res.json({ holdings: getAllHoldings(), households: getHouseholds(), people: getPeople() });
+app.get("/api/holdings", async (_req: Request, res: Response) => {
+  const [holdings, households, people] = await Promise.all([getAllHoldings(), getHouseholds(), getPeople()]);
+  res.json({ holdings, households, people });
 });
 
-app.post("/api/holdings", (req: Request, res: Response) => {
+app.post("/api/holdings", async (req: Request, res: Response) => {
   const h = req.body as Partial<Holding>;
   if (!h.symbol) { res.status(400).json({ error: "symbol is required" }); return; }
-  const holdings = addHolding({
+  const holdings = await addHolding({
     symbol: h.symbol.toUpperCase(),
     stock_name: h.stock_name ?? "",
     person_name: h.person_name ?? "",
@@ -286,10 +287,10 @@ app.post("/api/holdings", (req: Request, res: Response) => {
   res.json({ holdings });
 });
 
-app.delete("/api/holdings/:id", (req: Request, res: Response) => {
+app.delete("/api/holdings/:id", async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10);
   if (isNaN(id)) { res.status(400).json({ error: "invalid id" }); return; }
-  const holdings = removeHolding(id);
+  const holdings = await removeHolding(id);
   res.json({ holdings });
 });
 
@@ -381,44 +382,45 @@ app.post("/api/agent/:name", async (req: Request, res: Response) => {
 
 // --- Alerts API (CRUD) ---
 
-app.get("/api/alerts", (_req: Request, res: Response) => {
-  res.json({ alerts: getAllAlerts() });
+app.get("/api/alerts", async (_req: Request, res: Response) => {
+  res.json({ alerts: await getAllAlerts() });
 });
 
-app.delete("/api/alerts/:id", (req: Request, res: Response) => {
+app.delete("/api/alerts/:id", async (req: Request, res: Response) => {
   const id = parseInt(req.params.id as string, 10);
   if (isNaN(id)) { res.status(400).json({ error: "invalid id" }); return; }
-  dbRemoveAlert(id);
-  res.json({ alerts: getAllAlerts() });
+  await dbRemoveAlert(id);
+  res.json({ alerts: await getAllAlerts() });
 });
 
-app.post("/api/alerts/:id/toggle", (req: Request, res: Response) => {
+app.post("/api/alerts/:id/toggle", async (req: Request, res: Response) => {
   const id = parseInt(req.params.id as string, 10);
   const { enabled } = req.body as { enabled?: boolean };
   if (isNaN(id)) { res.status(400).json({ error: "invalid id" }); return; }
-  dbToggleAlert(id, enabled ?? true);
-  res.json({ alerts: getAllAlerts() });
+  await dbToggleAlert(id, enabled ?? true);
+  res.json({ alerts: await getAllAlerts() });
 });
 
 // --- Reports API ---
-app.get("/api/reports", (_req: Request, res: Response) => {
-  res.json({ reports: getReports(20) });
+app.get("/api/reports", async (_req: Request, res: Response) => {
+  res.json({ reports: await getReports(20) });
 });
 
-app.delete("/api/reports/:id", (req: Request, res: Response) => {
+app.delete("/api/reports/:id", async (req: Request, res: Response) => {
   const id = parseInt(req.params.id as string, 10);
   if (isNaN(id)) { res.status(400).json({ error: "invalid id" }); return; }
-  dbRemoveReport(id);
-  res.json({ reports: getReports(20) });
+  await dbRemoveReport(id);
+  res.json({ reports: await getReports(20) });
 });
 
 // --- Calendar API (direct, for UI listing) ---
-app.get("/api/calendar", (_req: Request, res: Response) => {
-  res.json({ events: getCalendarEvents() });
+app.get("/api/calendar", async (_req: Request, res: Response) => {
+  res.json({ events: await getCalendarEvents() });
 });
 
-export function startServer(port = 2404): void {
-  app.listen(port, () => {
-    originalLog(`\n  Web UI available at http://localhost:${port}\n`);
+export function startServer(port?: number): void {
+  const p = port ?? parseInt(process.env.PORT || "2404", 10);
+  app.listen(p, () => {
+    originalLog(`\n  Web UI available at http://localhost:${p}\n`);
   });
 }

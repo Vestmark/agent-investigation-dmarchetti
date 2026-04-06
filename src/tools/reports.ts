@@ -18,7 +18,7 @@ export const listReports = createTool({
     })),
   }),
   execute: async ({ limit }) => {
-    const reports = getReports(limit ?? 10);
+    const reports = await getReports(limit ?? 10);
     return {
       reports: reports.map((r) => ({
         id: r.id,
@@ -45,7 +45,7 @@ export const saveReport = createTool({
     message: z.string(),
   }),
   execute: async ({ title, report_type, content }) => {
-    const report = addReport({ title, report_type, content });
+    const report = await addReport({ title, report_type, content });
     return { id: report.id, title: report.title, message: `Report saved: ${title}` };
   },
 });
@@ -58,7 +58,7 @@ export const deleteReport = createTool({
   }),
   outputSchema: z.object({ success: z.boolean() }),
   execute: async ({ id }) => {
-    removeReport(id);
+    await removeReport(id);
     return { success: true };
   },
 });

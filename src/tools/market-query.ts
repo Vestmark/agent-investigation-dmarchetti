@@ -31,7 +31,7 @@ export const queryPortfolio = createTool({
     summary: z.string(),
   }),
   execute: async ({ filter }) => {
-    let holdings = getAllHoldings();
+    let holdings = await getAllHoldings();
     const f = filter?.trim();
 
     if (f) {

@@ -26,7 +26,7 @@ export const listAlerts = createTool({
     })),
   }),
   execute: async () => {
-    return { alerts: getAllAlerts() };
+    return { alerts: await getAllAlerts() };
   },
 });
 
@@ -50,7 +50,7 @@ export const createAlert = createTool({
     message: z.string(),
   }),
   execute: async ({ symbol, alert_type, threshold, person_name, household }) => {
-    const alert = addAlert({
+    const alert = await addAlert({
       symbol: symbol.toUpperCase(),
       alert_type,
       threshold,
@@ -73,7 +73,7 @@ export const deleteAlert = createTool({
   }),
   outputSchema: z.object({ success: z.boolean(), message: z.string() }),
   execute: async ({ id }) => {
-    removeAlert(id);
+    await removeAlert(id);
     return { success: true, message: `Alert ${id} deleted.` };
   },
 });
@@ -94,7 +94,7 @@ export const checkAlerts = createTool({
     checked: z.number(),
   }),
   execute: async () => {
-    const alerts = getEnabledAlerts();
+    const alerts = await getEnabledAlerts();
     const triggered: { id: number; symbol: string; alert_type: string; threshold: number; current_value: number; message: string }[] = [];
 
     for (const a of alerts) {
@@ -117,7 +117,7 @@ export const checkAlerts = createTool({
       }
 
       if (fire) {
-        updateAlertTriggered(a.id);
+        await updateAlertTriggered(a.id);
         triggered.push({ id: a.id, symbol: a.symbol, alert_type: a.alert_type, threshold: a.threshold, current_value: currentValue, message: msg });
       }
     }
