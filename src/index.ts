@@ -10,6 +10,8 @@ import { researchAgent } from "./agents/research.js";
 import { rebalanceAgent } from "./agents/rebalance.js";
 import { reportingAgent } from "./agents/reporting.js";
 import { sentimentAgent } from "./agents/sentiment.js";
+import { tickerAgent } from "./agents/ticker.js";
+import { countdownAgent } from "./agents/countdown.js";
 import { updateAlertPriceMap } from "./tools/alerts.js";
 import { loadSymbols } from "./symbols.js";
 import { fetchNewsForSymbol } from "./tools/fetch-news.js";
@@ -24,18 +26,23 @@ import {
   broadcastNewsStatus,
   setNewsIntervalChangeHandler,
   setNewsRefreshNowHandler,
+  setPriceRefreshNowHandler,
   setFirstClientHandler,
   setAdvisorHandler,
   setChatHandler,
   setEmailHandler,
   setAgentHandler,
   getNewsInterval,
+  broadcastTicker,
+  broadcastCountdown,
   type PriceRow,
   type NewsArticle,
+  type TickerItem,
 } from "./server.js";
 
 // --- Configuration ---
 const CHANGE_THRESHOLD = 0.01; // 0.01% change threshold
+const INDEX_SYMBOLS = ["^GSPC", "^DJI", "^IXIC"]; // S&P 500, Dow 30, Nasdaq
 
 // --- Types ---
 interface StockData {
@@ -53,7 +60,7 @@ let newsTimer: ReturnType<typeof setTimeout> | null = null;
 
 // --- Mastra setup ---
 const mastra = new Mastra({
-  agents: { stockMonitorAgent, newsAnalystAgent, advisorAgent, calendarAgent, chatAgent, emailAgent, alertsAgent, researchAgent, rebalanceAgent, reportingAgent, sentimentAgent },
+  agents: { stockMonitorAgent, newsAnalystAgent, advisorAgent, calendarAgent, chatAgent, emailAgent, alertsAgent, researchAgent, rebalanceAgent, reportingAgent, sentimentAgent, tickerAgent, countdownAgent },
 });
 
 const priceAgent = mastra.getAgent("stockMonitorAgent");
@@ -185,7 +192,8 @@ function printTable(symbols: string[], isInitial: boolean): void {
 }
 
 async function checkPrices(): Promise<void> {
-  const symbols = loadSymbols().sort((a, b) =>
+  const holdingSymbols = loadSymbols();
+  const symbols = [...new Set([...holdingSymbols, ...INDEX_SYMBOLS])].sort((a, b) =>
     a.replace(/^\^/, "").localeCompare(b.replace(/^\^/, ""))
   );
   const isInitial = symbols.some((s) => previousPrices[s] === undefined);
@@ -248,6 +256,57 @@ async function checkPrices(): Promise<void> {
   for (const sym of symbols) {
     if (currentData[sym]) {
       previousPrices[sym] = currentData[sym].price;
+    }
+  }
+
+  // Fire ticker agent in background (don't block price loop)
+  generateTickerCommentary(rows).catch((err) =>
+    console.error("Ticker agent error:", err)
+  );
+}
+
+// ============================================================
+// TICKER AGENT
+// ============================================================
+
+const tickerAgentInstance = mastra.getAgent("tickerAgent");
+
+async function generateTickerCommentary(rows: PriceRow[]): Promise<void> {
+  const priceLines = rows
+    .filter((r) => r.current > 0)
+    .map((r) => {
+      const dayStr = r.dayPct !== 0 ? `${r.dayPct >= 0 ? "+" : ""}${r.dayPct.toFixed(2)}%` : "flat";
+      return `${r.symbol}: $${r.current.toFixed(2)} (day: ${dayStr})`;
+    })
+    .join("\n");
+
+  const prompt = `Current prices:\n${priceLines}\n\nGenerate ticker commentary for each symbol.`;
+
+  const t0 = Date.now();
+  const response = await tickerAgentInstance.generate([
+    { role: "user", content: prompt },
+  ]);
+  const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+
+  try {
+    const text = response.text.trim();
+    const jsonStr = text.startsWith("```")
+      ? text.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "")
+      : text;
+    const items: TickerItem[] = JSON.parse(jsonStr);
+    broadcastTicker(items);
+    console.log(`  Ticker agent: ${items.length} items in ${elapsed}s`);
+  } catch {
+    // Try to extract JSON array from response
+    const match = response.text.match(/\[[\s\S]*\]/);
+    if (match) {
+      try {
+        const items: TickerItem[] = JSON.parse(match[0]);
+        broadcastTicker(items);
+        console.log(`  Ticker agent: ${items.length} items in ${elapsed}s`);
+      } catch {
+        console.error("  Ticker agent: failed to parse response");
+      }
     }
   }
 }
@@ -371,6 +430,54 @@ ${headlineLines.join("\n")}`;
   const totalTime = ((Date.now() - t0) / 1000).toFixed(1);
   console.log(`  News complete: ${totalFound} articles in ${totalTime}s`);
   broadcastNewsStatus(`Done — ${totalFound} articles in ${totalTime}s`);
+
+  // Start countdown immediately with default message, then update with agent commentary
+  const countdownStartedAt = Date.now();
+  broadcastCountdown(getNewsInterval(), "Next news scan...", countdownStartedAt);
+
+  // Fire countdown agent in background to replace the default message (keep same start time)
+  generateCountdownMessage(countdownStartedAt).catch((err) =>
+    console.error("Countdown agent error:", err)
+  );
+}
+
+// ============================================================
+// COUNTDOWN AGENT
+// ============================================================
+
+const countdownAgentInstance = mastra.getAgent("countdownAgent");
+
+async function generateCountdownMessage(startedAt: number): Promise<void> {
+  const interval = getNewsInterval();
+  const prompt = `News scan just completed. Generate a status message for the countdown to the next scan (${interval / 1000}s interval). Use the tools to check current portfolio state.`;
+
+  const t0 = Date.now();
+  const response = await countdownAgentInstance.generate([
+    { role: "user", content: prompt },
+  ]);
+  const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+
+  let message = "Monitoring portfolio positions...";
+  try {
+    const text = response.text.trim();
+    const jsonStr = text.startsWith("```")
+      ? text.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "")
+      : text;
+    const parsed = JSON.parse(jsonStr);
+    if (parsed.message) message = parsed.message;
+  } catch {
+    const match = response.text.match(/\{[\s\S]*\}/);
+    if (match) {
+      try {
+        const parsed = JSON.parse(match[0]);
+        if (parsed.message) message = parsed.message;
+      } catch { /* use default */ }
+    }
+  }
+
+  console.log(`  Countdown agent: "${message}" in ${elapsed}s`);
+  // Reuse original startedAt so the seconds don't jump back
+  broadcastCountdown(interval, message, startedAt);
 }
 
 function scheduleNewsPoll(): void {
@@ -405,6 +512,13 @@ async function main(): Promise<void> {
     console.log(`  [${new Date().toLocaleTimeString()}] Manual news refresh triggered`);
     fetchAndAnalyzeNews();
     scheduleNewsPoll(); // reset timer
+  });
+
+  // Immediate price refresh from UI
+  setPriceRefreshNowHandler(() => {
+    console.log(`  [${new Date().toLocaleTimeString()}] Manual price refresh triggered`);
+    checkPrices().catch(console.error);
+    schedulePricePoll(); // reset timer
   });
 
   // Advisor agent handler

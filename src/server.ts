@@ -84,6 +84,33 @@ export function broadcastNewsAppend(articles: NewsArticle[], lastUpdated: string
   }
 }
 
+// --- Ticker broadcast ---
+export interface TickerItem {
+  symbol: string;
+  comment: string;
+}
+
+let lastTickerData: string | null = null;
+
+export function broadcastTicker(items: TickerItem[]): void {
+  const data = JSON.stringify({ items });
+  lastTickerData = data;
+  for (const client of clients) {
+    client.res.write(`event: ticker\ndata: ${data}\n\n`);
+  }
+}
+
+// --- Countdown broadcast ---
+let lastCountdownData: string | null = null;
+
+export function broadcastCountdown(intervalMs: number, message: string, startedAt?: number): void {
+  const data = JSON.stringify({ intervalMs, message, startedAt: startedAt ?? Date.now() });
+  lastCountdownData = data;
+  for (const client of clients) {
+    client.res.write(`event: countdown\ndata: ${data}\n\n`);
+  }
+}
+
 // Intercept console.log to also broadcast
 const originalLog = console.log.bind(console);
 console.log = (...args: unknown[]) => {
@@ -115,6 +142,12 @@ app.get("/api/logs", (_req: Request, res: Response) => {
   if (lastNewsArticles.length > 0) {
     const newsData = JSON.stringify({ articles: lastNewsArticles, lastUpdated: new Date().toLocaleTimeString() });
     res.write(`event: news\ndata: ${newsData}\n\n`);
+  }
+  if (lastTickerData) {
+    res.write(`event: ticker\ndata: ${lastTickerData}\n\n`);
+  }
+  if (lastCountdownData) {
+    res.write(`event: countdown\ndata: ${lastCountdownData}\n\n`);
   }
 
   const id = ++clientId;
@@ -153,7 +186,7 @@ app.delete("/api/symbols/:symbol", (req: Request, res: Response) => {
 });
 
 // --- Price Interval API ---
-let currentIntervalMs = 10_000;
+let currentIntervalMs = 60_000;
 let onIntervalChange: ((ms: number) => void) | null = null;
 
 export function setIntervalChangeHandler(handler: (ms: number) => void): void {
@@ -177,6 +210,18 @@ app.post("/api/interval", (req: Request, res: Response) => {
   currentIntervalMs = intervalMs;
   if (onIntervalChange) onIntervalChange(intervalMs);
   res.json({ intervalMs: currentIntervalMs });
+});
+
+// --- Price Refresh API ---
+let onPriceRefreshNow: (() => void) | null = null;
+
+export function setPriceRefreshNowHandler(handler: () => void): void {
+  onPriceRefreshNow = handler;
+}
+
+app.post("/api/price-refresh", (_req: Request, res: Response) => {
+  if (onPriceRefreshNow) onPriceRefreshNow();
+  res.json({ ok: true });
 });
 
 // --- News Interval API ---

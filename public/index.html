@@ -25,11 +25,6 @@
     .topbar-controls input, .topbar-controls select, .topbar-controls button {
       font-size: 10px; padding: 3px 8px; font-family: inherit;
     }
-    .topbar-controls input {
-      background: #30363d; border: 1px solid #484f58; color: #e6edf3;
-      border-radius: 3px; width: 70px; outline: none;
-    }
-    .topbar-controls input:focus { border-color: #58a6ff; }
     .topbar-controls select {
       background: #30363d; border: 1px solid #484f58; color: #e6edf3;
       border-radius: 3px; outline: none;
@@ -40,6 +35,11 @@
     }
     .topbar-controls button:hover { background: #2ea043; }
     .topbar-controls label { font-size: 9px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.3px; }
+    .tb-refresh {
+      background: #30363d !important; border: 1px solid #484f58 !important;
+      color: #e6edf3 !important; border-radius: 3px; padding: 3px 10px;
+    }
+    .tb-refresh:hover { background: #484f58 !important; }
     .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
     .status-dot {
       width: 7px; height: 7px; border-radius: 50%; background: #3fb950;
@@ -154,6 +154,96 @@
     .household-tag.pinnacle { background: #ddf4ff; color: #0969da; }
     .household-tag.horizon { background: #fff8c5; color: #9a6700; }
 
+    /* Household group rows */
+    .hh-group-row { cursor: pointer; background: #f6f8fa; }
+    .hh-group-row:hover { background: #eaeef2; }
+    .hh-group-row td {
+      padding: 5px 8px; font-weight: 600; font-size: 11px;
+      border-bottom: 2px solid #d1d9e0; font-variant-numeric: tabular-nums;
+    }
+    .hh-group-arrow {
+      display: inline-block; width: 14px; font-size: 9px; color: #656d76;
+      transition: transform 0.15s; text-align: center;
+    }
+    .hh-group-arrow.expanded { transform: rotate(90deg); }
+    .hh-group-summary { color: #656d76; font-weight: 400; font-size: 10px; margin-left: 6px; }
+    .hh-child-row td:first-child { padding-left: 28px; }
+
+    /* ===== Dashboard panel ===== */
+    .dashboard-row {
+      display: flex; gap: 0; height: 100%; min-height: 0;
+    }
+    .dash-section {
+      display: flex; flex-direction: column; overflow: hidden;
+      border-right: 1px solid #d1d9e0;
+    }
+    .dash-section:last-child { border-right: none; }
+    .dash-section-header {
+      font-size: 9px; color: #656d76; text-transform: uppercase;
+      letter-spacing: 0.5px; font-weight: 600; padding: 6px 12px;
+      background: #f6f8fa; border-bottom: 1px solid #eaeef2; flex-shrink: 0;
+    }
+    .dash-section-body { flex: 1; overflow: auto; min-height: 0; padding: 10px 12px; }
+
+    /* AUM */
+    .dash-aum { width: 220px; flex-shrink: 0; }
+    .aum-value { font-size: 22px; font-weight: 700; color: #1f2328; margin-bottom: 4px; }
+    .aum-pl { font-size: 12px; margin-bottom: 10px; }
+    .aum-households { display: flex; flex-direction: column; gap: 4px; }
+    .aum-hh {
+      display: flex; justify-content: space-between; font-size: 10px; color: #656d76;
+      padding: 3px 0; border-bottom: 1px solid #eaeef2;
+    }
+    .aum-hh:last-child { border-bottom: none; }
+    .aum-hh-name { font-weight: 600; }
+
+    /* Market Indexes */
+    .dash-indexes { flex: 1; min-width: 0; }
+    .indexes-row {
+      display: flex; gap: 0; height: 100%; align-items: stretch;
+    }
+    .index-card {
+      flex: 1; display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px; border-right: 1px solid #eaeef2;
+    }
+    .index-card:last-child { border-right: none; }
+    .index-info { display: flex; flex-direction: column; gap: 1px; }
+    .index-name { font-size: 11px; color: #0969da; font-weight: 600; }
+    .index-value { font-size: 15px; font-weight: 700; color: #1f2328; font-variant-numeric: tabular-nums; }
+    .index-spark { flex-shrink: 0; }
+    .index-spark svg { display: block; }
+    .index-change {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 0;
+      font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums;
+    }
+    .index-change-val { white-space: nowrap; }
+    .index-change-pct { white-space: nowrap; }
+    .index-loading { color: #afb8c1; font-size: 11px; padding: 20px; text-align: center; }
+
+    /* Alerts mini panel */
+    .dash-alerts { width: 280px; flex-shrink: 0; }
+    .dash-alerts .dash-section-body { padding: 0; }
+    .alert-mini-item {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 12px; border-bottom: 1px solid #eaeef2; font-size: 10px;
+    }
+    .alert-mini-item:hover { background: #f6f8fa; }
+    .alert-mini-sym { color: #0969da; font-weight: 600; width: 45px; flex-shrink: 0; }
+    .alert-mini-type { color: #656d76; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .alert-mini-status {
+      font-size: 8px; font-weight: 600; padding: 1px 4px; border-radius: 3px;
+      text-transform: uppercase; white-space: nowrap; flex-shrink: 0;
+    }
+    .alert-mini-status.active { background: #dafbe1; color: #1a7f37; }
+    .alert-mini-status.triggered { background: #ffebe9; color: #d1242f; animation: alert-pulse 1s ease-in-out infinite; }
+    .alert-mini-status.disabled { background: #eaeef2; color: #afb8c1; }
+    @keyframes alert-pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+    .alert-mini-empty { padding: 12px; color: #afb8c1; font-size: 10px; text-align: center; }
+    .alerts-badge {
+      background: #d1242f; color: #fff; font-size: 8px; font-weight: 700;
+      padding: 1px 4px; border-radius: 6px; margin-left: 4px;
+    }
+
     /* Holdings action bar */
     .action-bar {
       display: none; align-items: center; gap: 4px; padding: 4px 12px;
@@ -186,18 +276,18 @@
     .news-col-body { flex: 1; overflow-y: auto; min-height: 0; }
 
     .news-item {
-      padding: 5px 10px; border-bottom: 1px solid #eaeef2;
-      font-size: 10px; line-height: 1.3; transition: opacity 0.3s ease;
+      padding: 6px 10px; border-bottom: 1px solid #eaeef2;
+      font-size: 12px; line-height: 1.4;
     }
     .news-item:hover { background: #f6f8fa; }
     .news-item-row1 { display: flex; gap: 4px; align-items: center; }
     .news-item-row2 { display: flex; gap: 4px; align-items: center; margin-top: 2px; }
     .news-symbol {
-      background: #ddf4ff; color: #0969da; padding: 1px 3px; border-radius: 3px;
-      font-size: 8px; font-weight: 600; white-space: nowrap; flex-shrink: 0;
+      background: #ddf4ff; color: #0969da; padding: 1px 4px; border-radius: 3px;
+      font-size: 10px; font-weight: 600; white-space: nowrap; flex-shrink: 0;
     }
     .news-impact {
-      padding: 1px 3px; border-radius: 3px; font-size: 7px; font-weight: 600;
+      padding: 1px 4px; border-radius: 3px; font-size: 9px; font-weight: 600;
       white-space: nowrap; flex-shrink: 0; text-transform: uppercase;
     }
     .news-impact.positive { background: #dafbe1; color: #1a7f37; }
@@ -206,20 +296,35 @@
     .news-title { flex: 1; color: #1f2328; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .news-title a { color: #1f2328; text-decoration: none; }
     .news-title a:hover { color: #0969da; text-decoration: underline; }
-    .news-summary { flex: 1; color: #656d76; font-size: 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .news-source { color: #656d76; font-size: 8px; white-space: nowrap; flex-shrink: 0; }
-    .news-time { color: #afb8c1; font-size: 8px; white-space: nowrap; flex-shrink: 0; }
+    .news-summary { flex: 1; color: #656d76; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .news-source { color: #656d76; font-size: 10px; white-space: nowrap; flex-shrink: 0; }
+    .news-time { color: #afb8c1; font-size: 10px; white-space: nowrap; flex-shrink: 0; }
     .news-crossref {
-      background: #fff8c5; color: #9a6700; padding: 1px 3px; border-radius: 3px;
-      font-size: 7px; font-weight: 600; white-space: nowrap; flex-shrink: 0;
+      background: #fff8c5; color: #9a6700; padding: 1px 4px; border-radius: 3px;
+      font-size: 9px; font-weight: 600; white-space: nowrap; flex-shrink: 0;
     }
     .news-loading { text-align: center; padding: 12px; color: #656d76; font-size: 11px; }
+    .news-countdown {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; color: #656d76; padding: 1px 8px;
+      background: #f0f3f6; border-radius: 3px; border: 1px solid #d1d9e0;
+    }
+    .news-countdown-seconds {
+      font-weight: 700; color: #0969da; font-variant-numeric: tabular-nums;
+      min-width: 24px; text-align: right;
+    }
+    .news-countdown-msg { color: #8b949e; font-style: italic; }
     .news-status-bar {
       padding: 4px 10px; background: #ddf4ff; color: #0969da; font-size: 9px;
       border-bottom: 1px solid #b6d9f7; display: flex; align-items: center; gap: 4px;
       position: sticky; top: 0; z-index: 1;
     }
     .news-item-new { opacity: 0; transform: translateY(-4px); }
+    .news-toolbar {
+      display: flex; gap: 6px; align-items: center; padding: 3px 10px;
+      background: #fff; border-bottom: 1px solid #eaeef2; flex-shrink: 0;
+    }
+    .news-toolbar select { font-size: 10px; padding: 2px 6px; }
 
     /* ===== Chat panel ===== */
     .chat-tabs {
@@ -289,6 +394,35 @@
       display: flex; gap: 6px; justify-content: flex-end; align-items: center;
     }
 
+    /* ===== Ticker tape ===== */
+    .ticker-bar {
+      flex-shrink: 0; height: 26px; background: #1f2328; color: #e6edf3;
+      overflow: hidden; position: relative; border-top: 1px solid #30363d;
+      border-bottom: 1px solid #30363d;
+    }
+    .ticker-track {
+      display: flex; position: absolute; top: 0; left: 0; height: 100%;
+      align-items: center; white-space: nowrap;
+      animation: ticker-scroll 40s linear infinite;
+    }
+    .ticker-bar:hover .ticker-track { animation-play-state: paused; }
+    @keyframes ticker-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 0 16px; font-size: 11px; font-variant-numeric: tabular-nums;
+      border-right: 1px solid #30363d; height: 100%;
+    }
+    .ticker-sym { color: #58a6ff; font-weight: 600; }
+    .ticker-price { color: #e6edf3; }
+    .ticker-change { font-weight: 600; font-size: 10px; }
+    .ticker-up { color: #3fb950; }
+    .ticker-down { color: #f85149; }
+    .ticker-flat { color: #8b949e; }
+    .ticker-comment { color: #8b949e; font-size: 10px; font-style: italic; margin-left: 2px; }
+
     /* ===== Log drawer ===== */
     .log-drawer { flex-shrink: 0; transition: height 0.2s ease; overflow: hidden; }
     .log-drawer.collapsed { height: 24px; }
@@ -310,13 +444,6 @@
     .log-content .line.change { color: #3fb950; }
     .log-content .line.no-change { color: #8b949e; }
     .log-content .line.below-open { color: #f85149; }
-
-    /* ===== News filter bar (inside news panel) ===== */
-    .news-toolbar {
-      display: flex; gap: 6px; align-items: center; padding: 3px 10px;
-      background: #fff; border-bottom: 1px solid #eaeef2; flex-shrink: 0;
-    }
-    .news-toolbar select { font-size: 10px; padding: 2px 6px; }
   </style>
 </head>
 <body>
@@ -325,15 +452,7 @@
   <div class="topbar">
     <h1>Stock Monitor</h1>
     <div class="topbar-controls">
-      <label>Add</label>
-      <input type="text" id="new-symbol" placeholder="MSFT">
-      <button id="add-btn">+</button>
-      <label>Price</label>
-      <select id="interval-select">
-        <option value="5000">5s</option><option value="10000" selected>10s</option>
-        <option value="30000">30s</option><option value="60000">1m</option>
-        <option value="300000">5m</option>
-      </select>
+      <button class="tb-refresh" id="refresh-prices-btn">Refresh Prices</button>
       <label>News</label>
       <select id="news-interval-select">
         <option value="10000">10s</option><option value="30000">30s</option>
@@ -350,28 +469,43 @@
   <!-- Panels -->
   <div class="panels" id="panels">
 
-    <!-- Prices -->
-    <div class="panel" id="p-prices" style="flex:1.5">
+    <!-- Dashboard (AUM + Indexes + Alerts) -->
+    <div class="panel" id="p-dashboard" style="flex:1">
       <div class="panel-bar">
-        <h3>Prices</h3>
+        <h3>Dashboard</h3>
         <span class="meta" id="prices-status"></span>
         <span class="spacer"></span>
         <button class="pbtn" data-action="dock" title="Minimize">&#x2015;</button>
         <button class="pbtn" data-action="restore" title="Restore">&#x25A1;</button>
       </div>
-      <div class="panel-body">
-        <table class="data-table" id="price-table">
-          <thead><tr>
-            <th>Symbol</th><th class="num">Previous</th><th class="num">Current</th>
-            <th class="num">Change %</th><th class="num">Open</th><th class="num">Day %</th>
-          </tr></thead>
-          <tbody id="price-body">
-            <tr><td colspan="6" class="news-loading"><span class="spinner"></span> Waiting for prices...</td></tr>
-          </tbody>
-        </table>
+      <div class="panel-body" style="padding:0;overflow:hidden;">
+        <div class="dashboard-row">
+          <!-- AUM -->
+          <div class="dash-section dash-aum">
+            <div class="dash-section-header">Portfolio AUM</div>
+            <div class="dash-section-body" id="dash-aum">
+              <div class="aum-value">--</div>
+              <div class="aum-pl na">Waiting for data...</div>
+            </div>
+          </div>
+          <!-- Market Indexes -->
+          <div class="dash-section dash-indexes">
+            <div class="dash-section-header">US Markets</div>
+            <div class="dash-section-body" id="dash-indexes" style="padding:0;">
+              <div class="index-loading"><span class="spinner"></span> Waiting for prices...</div>
+            </div>
+          </div>
+          <!-- Alerts -->
+          <div class="dash-section dash-alerts">
+            <div class="dash-section-header">Alerts <span id="alerts-badge"></span></div>
+            <div class="dash-section-body" id="dash-alerts">
+              <div class="alert-mini-empty">Loading alerts...</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="resize-handle" data-above="p-prices" data-below="p-holdings"></div>
+    <div class="resize-handle" data-above="p-dashboard" data-below="p-holdings"></div>
 
     <!-- Holdings -->
     <div class="panel" id="p-holdings" style="flex:2">
@@ -404,7 +538,6 @@
       <div class="panel-body">
         <table class="data-table" id="holdings-table">
           <thead><tr>
-            <th><span class="th-sort" data-col="household">Household</span></th>
             <th><span class="th-sort" data-col="person_name">Person</span></th>
             <th><span class="th-sort" data-col="stock_name">Name</span></th>
             <th><span class="th-sort" data-col="symbol">Symbol</span></th>
@@ -414,7 +547,7 @@
             <th class="num"><span class="th-sort" data-col="_pl">P/L</span></th>
           </tr></thead>
           <tbody id="holdings-body">
-            <tr><td colspan="8" class="news-loading"><span class="spinner"></span> Loading...</td></tr>
+            <tr><td colspan="7" class="news-loading"><span class="spinner"></span> Loading...</td></tr>
           </tbody>
         </table>
       </div>
@@ -427,6 +560,7 @@
         <h3>News</h3>
         <span class="meta" id="news-status"></span>
         <span class="spacer"></span>
+        <span class="news-countdown" id="news-countdown"></span>
         <button class="btn-s" id="refresh-news-btn" style="font-size:9px;padding:1px 6px;">Refresh</button>
         <button class="pbtn" data-action="dock" title="Minimize">&#x2015;</button>
         <button class="pbtn" data-action="restore" title="Restore">&#x25A1;</button>
@@ -483,6 +617,13 @@
     </div>
   </div>
 
+  <!-- Ticker Tape -->
+  <div class="ticker-bar" id="ticker-bar">
+    <div class="ticker-track" id="ticker-track">
+      <span class="ticker-item" style="color:#8b949e">Waiting for price data...</span>
+    </div>
+  </div>
+
   <!-- Log Drawer -->
   <div class="log-drawer collapsed" id="log-drawer">
     <div class="log-tab" id="log-tab">
@@ -525,19 +666,25 @@
     }
 
     // ===== DOM refs =====
-    const priceBody = document.getElementById('price-body');
     const newsPositive = document.getElementById('news-positive');
     const newsNegative = document.getElementById('news-negative');
     const newsUpdatedEl = document.getElementById('news-updated');
-    const pricesStatusEl = document.getElementById('prices-status');
     const lastUpdatedEl = document.getElementById('last-updated');
     const holdingsBody = document.getElementById('holdings-body');
 
     // ===== Shared state =====
     const currentPriceMap = {};
+    let allPriceRows = [];
     let allHoldings = [];
     let allNewsArticles = [];
+    let allAlerts = [];
     let symbolHouseholdMap = {};
+    let tickerComments = {};
+
+    // Index symbols + sparkline history
+    const INDEX_SYMS = { '^GSPC': 'S&P 500', '^DJI': 'Dow 30', '^IXIC': 'Nasdaq' };
+    const indexHistory = { '^GSPC': [], '^DJI': [], '^IXIC': [] };
+    const MAX_SPARK = 30;
 
     // ===== SSE =====
     function connectSSE() {
@@ -545,11 +692,21 @@
       src.addEventListener('log', (e) => { appendLog(JSON.parse(e.data).text); });
       src.addEventListener('prices', (e) => {
         const { rows, lastUpdated } = JSON.parse(e.data);
-        for (const r of rows) { if (r.current) currentPriceMap[r.symbol] = r.current; }
-        renderPriceTable(rows);
-        lastUpdatedEl.textContent = `Prices: ${lastUpdated}`;
-        pricesStatusEl.textContent = lastUpdated;
-        if (allHoldings.length) refreshHoldingsView();
+        allPriceRows = rows;
+        for (const r of rows) {
+          if (r.current) currentPriceMap[r.symbol] = r.current;
+          // Track index history for sparklines
+          if (indexHistory[r.symbol] !== undefined && r.current) {
+            indexHistory[r.symbol].push(r.current);
+            if (indexHistory[r.symbol].length > MAX_SPARK) indexHistory[r.symbol].shift();
+          }
+        }
+        lastUpdatedEl.textContent = `Updated: ${lastUpdated}`;
+        document.getElementById('prices-status').textContent = lastUpdated;
+        renderDashIndexes(rows);
+        renderTicker(rows);
+        if (allHoldings.length) { refreshHoldingsView(); renderDashAUM(); }
+        checkAlertsTrigger();
       });
       src.addEventListener('news', (e) => {
         const { articles, lastUpdated } = JSON.parse(e.data);
@@ -579,33 +736,244 @@
         appendNews(articles);
         newsUpdatedEl.textContent = lastUpdated;
       });
+      src.addEventListener('ticker', (e) => {
+        const { items } = JSON.parse(e.data);
+        tickerComments = {};
+        for (const item of items) tickerComments[item.symbol] = item.comment;
+        // Re-render ticker with agent commentary
+        if (allPriceRows.length) renderTicker(allPriceRows);
+      });
+      src.addEventListener('countdown', (e) => {
+        const { intervalMs, message, startedAt } = JSON.parse(e.data);
+        startNewsCountdown(intervalMs, message, startedAt);
+      });
       src.onerror = () => { src.close(); setTimeout(connectSSE, 3000); };
     }
 
-    // ===== Price Table =====
+    // ===== Formatting =====
     function fmtPrice(n) { return (n === null || n === undefined) ? '--' : '$' + n.toFixed(2); }
     function fmtPct(p) { return (p === null || p === undefined) ? '--' : (p >= 0 ? '+' : '') + p.toFixed(2) + '%'; }
     function fmtVal(n) { return n ? '$' + n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '--'; }
+    function fmtNum(n) { return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
-    let lastPriceRows = [];
-    function renderPriceTable(rows) {
-      lastPriceRows = rows;
-      priceBody.innerHTML = '';
-      for (const r of rows) {
-        const tr = document.createElement('tr');
-        if (r.belowOpen) tr.classList.add('below-open');
-        const dc = r.dayPct >= 0 ? 'day-positive' : 'day-negative';
-        const cc = r.changePct !== null ? (r.changePct >= 0 ? 'day-positive' : 'day-negative') : '';
-        tr.innerHTML = `
-          <td class="symbol-cell">${r.symbol}</td>
-          <td class="num">${r.previous !== null ? fmtPrice(r.previous) : '<span class="na">--</span>'}</td>
-          <td class="num">${fmtPrice(r.current)}</td>
-          <td class="num ${cc}">${fmtPct(r.changePct)}</td>
-          <td class="num">${fmtPrice(r.open)}</td>
-          <td class="num ${dc}">${fmtPct(r.dayPct)}</td>`;
-        priceBody.appendChild(tr);
+    // ===== Dashboard: AUM =====
+    function renderDashAUM() {
+      const el = document.getElementById('dash-aum');
+      const enriched = allHoldings.filter(h => h.positions > 0 && !h.symbol.startsWith('^')).map(h => {
+        const cp = currentPriceMap[h.symbol] || 0;
+        const cv = h.positions * cp;
+        const sv = h.positions * h.strike_price;
+        return { ...h, cv, sv, pl: cv - sv };
+      });
+      const totalCV = enriched.reduce((s, h) => s + h.cv, 0);
+      const totalPL = enriched.reduce((s, h) => s + h.pl, 0);
+      const totalSV = enriched.reduce((s, h) => s + h.sv, 0);
+      const plPct = totalSV > 0 ? (totalPL / totalSV) * 100 : 0;
+      const households = [...new Set(enriched.map(h => h.household).filter(Boolean))].sort();
+
+      const plClass = totalPL >= 0 ? 'day-positive' : 'day-negative';
+      let html = `<div class="aum-value">${fmtVal(totalCV)}</div>`;
+      html += `<div class="aum-pl ${plClass}">${totalPL >= 0 ? '+' : ''}${fmtVal(totalPL)} (${fmtPct(plPct)})</div>`;
+      html += '<div class="aum-households">';
+      for (const hh of households) {
+        const hhH = enriched.filter(h => h.household === hh);
+        const hhCV = hhH.reduce((s, h) => s + h.cv, 0);
+        const hhPL = hhH.reduce((s, h) => s + h.pl, 0);
+        const hhClass = hhPL >= 0 ? 'day-positive' : 'day-negative';
+        html += `<div class="aum-hh"><span class="aum-hh-name">${hh}</span><span>${fmtVal(hhCV)}</span><span class="${hhClass}">${hhPL >= 0 ? '+' : ''}${fmtVal(hhPL)}</span></div>`;
       }
+      html += '</div>';
+      el.innerHTML = html;
     }
+
+    // ===== Dashboard: Market Indexes =====
+    function renderSparkline(prices, width, height) {
+      if (prices.length < 2) return '';
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      const range = max - min || 1;
+      const pts = prices.map((p, i) => {
+        const x = (i / (prices.length - 1)) * width;
+        const y = height - ((p - min) / range) * (height - 2) - 1;
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      }).join(' ');
+      const color = prices[prices.length - 1] >= prices[0] ? '#1a7f37' : '#d1242f';
+      return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+    }
+
+    function renderDashIndexes(rows) {
+      const el = document.getElementById('dash-indexes');
+      const syms = Object.keys(INDEX_SYMS);
+      const indexRows = syms.map(s => rows.find(r => r.symbol === s)).filter(Boolean);
+
+      if (!indexRows.length) {
+        el.innerHTML = '<div class="index-loading"><span class="spinner"></span> Waiting for index data...</div>';
+        return;
+      }
+
+      let html = '<div class="indexes-row">';
+      for (const r of indexRows) {
+        const name = INDEX_SYMS[r.symbol] || r.symbol;
+        const change = r.previousClose ? r.current - r.previousClose : null;
+        const changePct = r.previousClose ? ((r.current - r.previousClose) / r.previousClose) * 100 : null;
+        const isUp = change !== null ? change >= 0 : true;
+        const colorClass = isUp ? 'day-positive' : 'day-negative';
+        const spark = renderSparkline(indexHistory[r.symbol] || [], 50, 24);
+
+        html += `<div class="index-card">
+          <div class="index-info">
+            <div class="index-name">${name}</div>
+            <div class="index-value">${fmtNum(r.current)}</div>
+          </div>
+          <div class="index-spark">${spark}</div>
+          <div class="index-change ${colorClass}">
+            <span class="index-change-val">${change !== null ? (isUp ? '+' : '') + fmtNum(change) : '--'}</span>
+            <span class="index-change-pct">${changePct !== null ? (isUp ? '+' : '') + changePct.toFixed(2) + '%' : '--'}</span>
+          </div>
+        </div>`;
+      }
+      html += '</div>';
+      el.innerHTML = html;
+    }
+
+    // ===== Dashboard: Alerts =====
+    function checkAlertsTrigger() {
+      if (!allAlerts.length) return;
+      let triggered = 0;
+      for (const a of allAlerts) {
+        if (!a.enabled) continue;
+        const price = currentPriceMap[a.symbol];
+        if (!price) continue;
+        if (a.alert_type === 'price_above' && price > a.threshold) { a._triggered = true; triggered++; }
+        else if (a.alert_type === 'price_below' && price < a.threshold) { a._triggered = true; triggered++; }
+        else { a._triggered = false; }
+      }
+      renderDashAlerts();
+    }
+
+    function renderDashAlerts() {
+      const el = document.getElementById('dash-alerts');
+      const badge = document.getElementById('alerts-badge');
+      const enabled = allAlerts.filter(a => a.enabled);
+      const triggered = enabled.filter(a => a._triggered);
+
+      if (triggered.length > 0) {
+        badge.innerHTML = `<span class="alerts-badge">${triggered.length}</span>`;
+      } else {
+        badge.innerHTML = '';
+      }
+
+      if (!allAlerts.length) {
+        el.innerHTML = '<div class="alert-mini-empty">No alerts configured.<br>Use Holdings actions to set alerts.</div>';
+        return;
+      }
+
+      let html = '';
+      // Show triggered first, then active, then disabled
+      const sorted = [...allAlerts].sort((a, b) => {
+        if (a._triggered && !b._triggered) return -1;
+        if (!a._triggered && b._triggered) return 1;
+        if (a.enabled && !b.enabled) return -1;
+        if (!a.enabled && b.enabled) return 1;
+        return 0;
+      });
+
+      for (const a of sorted) {
+        const typeLabel = a.alert_type.replace(/_/g, ' ');
+        const threshStr = a.alert_type.includes('change') ? a.threshold + '%' : '$' + a.threshold.toFixed(2);
+        let statusClass = 'active';
+        let statusLabel = 'Active';
+        if (a._triggered) { statusClass = 'triggered'; statusLabel = 'Triggered'; }
+        else if (!a.enabled) { statusClass = 'disabled'; statusLabel = 'Off'; }
+
+        html += `<div class="alert-mini-item">
+          <span class="alert-mini-sym">${a.symbol}</span>
+          <span class="alert-mini-type">${typeLabel} ${threshStr}</span>
+          <span class="alert-mini-status ${statusClass}">${statusLabel}</span>
+        </div>`;
+      }
+      el.innerHTML = html;
+    }
+
+    async function fetchAlerts() {
+      try {
+        const res = await fetch('/api/alerts');
+        const { alerts } = await res.json();
+        allAlerts = alerts.map(a => ({ ...a, _triggered: false }));
+        checkAlertsTrigger();
+      } catch (e) {}
+    }
+
+    // ===== Ticker tape =====
+    const tickerTrack = document.getElementById('ticker-track');
+    const FRIENDLY_NAMES = {
+      '^GSPC': 'S&P 500', '^DJI': 'Dow 30', '^IXIC': 'Nasdaq',
+    };
+
+    function renderTicker(rows) {
+      const items = rows.filter(r => r.current > 0).map(r => {
+        const name = FRIENDLY_NAMES[r.symbol] || r.symbol;
+        const change = r.previousClose ? r.current - r.previousClose : null;
+        const changePct = r.previousClose ? ((r.current - r.previousClose) / r.previousClose) * 100 : null;
+        const isUp = change !== null ? change >= 0 : true;
+        const colorClass = change === null ? 'ticker-flat' : (isUp ? 'ticker-up' : 'ticker-down');
+        const arrow = change === null ? '' : (isUp ? '\u25B2' : '\u25BC');
+        const changeStr = change !== null ? `${arrow} ${Math.abs(change).toFixed(2)} (${Math.abs(changePct).toFixed(2)}%)` : '';
+        const comment = tickerComments[r.symbol];
+        const commentHtml = comment ? `<span class="ticker-comment">${comment}</span>` : '';
+        return `<span class="ticker-item"><span class="ticker-sym">${name}</span><span class="ticker-price">${fmtNum(r.current)}</span><span class="ticker-change ${colorClass}">${changeStr}</span>${commentHtml}</span>`;
+      }).join('');
+
+      // Duplicate content for seamless loop
+      tickerTrack.innerHTML = items + items;
+
+      // Adjust animation speed based on content width
+      const halfWidth = tickerTrack.scrollWidth / 2;
+      const speed = Math.max(25, halfWidth / 50); // ~50px per second
+      tickerTrack.style.animationDuration = speed + 's';
+    }
+
+    // ===== News Countdown =====
+    const countdownEl = document.getElementById('news-countdown');
+    let countdownTimer = null;
+    let countdownStartedAt = null;
+    let countdownMessage = '';
+
+    function startNewsCountdown(intervalMs, message, startedAt) {
+      // If same startedAt, just update the message text (agent responded with commentary)
+      if (startedAt === countdownStartedAt && countdownTimer) {
+        countdownMessage = message;
+        return;
+      }
+
+      if (countdownTimer) clearInterval(countdownTimer);
+      countdownStartedAt = startedAt;
+      countdownMessage = message;
+      const endAt = startedAt + intervalMs;
+
+      function tick() {
+        const remaining = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+        if (remaining <= 0) {
+          countdownEl.innerHTML = '<span class="spinner" style="width:10px;height:10px;border-width:1.5px;margin:0"></span> Scanning...';
+          clearInterval(countdownTimer);
+          countdownTimer = null;
+          countdownStartedAt = null;
+          return;
+        }
+        countdownEl.innerHTML = `<span class="news-countdown-seconds">${remaining}s</span><span class="news-countdown-msg">${countdownMessage}</span>`;
+      }
+
+      tick();
+      countdownTimer = setInterval(tick, 1000);
+    }
+
+    // ===== Refresh button =====
+    document.getElementById('refresh-prices-btn').onclick = async () => {
+      const btn = document.getElementById('refresh-prices-btn');
+      btn.textContent = 'Refreshing...'; btn.disabled = true;
+      await fetch('/api/price-refresh', { method: 'POST' });
+      setTimeout(() => { btn.textContent = 'Refresh Prices'; btn.disabled = false; }, 2000);
+    };
 
     // ===== News =====
     const newsFilterSymbol = document.getElementById('news-filter-symbol');
@@ -701,6 +1069,8 @@
     document.getElementById('refresh-news-btn').onclick = async () => {
       newsPositive.innerHTML = '<div class="news-loading"><span class="spinner"></span> Fetching news...</div>';
       newsNegative.innerHTML = '';
+      if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+      countdownEl.innerHTML = '<span class="spinner" style="width:10px;height:10px;border-width:1.5px;margin:0"></span> Scanning...';
       await fetch('/api/news-refresh', { method: 'POST' });
     };
 
@@ -756,9 +1126,10 @@
     });
 
     // ===== Holdings =====
-    let holdingsSortCol = 'household';
+    let holdingsSortCol = 'person_name';
     let holdingsSortDir = 'asc';
     let selectedHolding = null;
+    const expandedHouseholds = new Set();
 
     const hfName = document.getElementById('hf-name');
     const hfPerson = document.getElementById('hf-person');
@@ -801,7 +1172,7 @@
     }
 
     function getFilteredSortedHoldings() {
-      let enriched = allHoldings.map(h => {
+      let enriched = allHoldings.filter(h => !h.symbol.startsWith('^')).map(h => {
         const cp = currentPriceMap[h.symbol] || 0;
         const cv = h.positions * cp;
         const sv = h.positions * h.strike_price;
@@ -839,31 +1210,78 @@
     function renderHoldings(holdings) {
       holdingsBody.innerHTML = '';
       if (!holdings.length) {
-        holdingsBody.innerHTML = '<tr><td colspan="8" class="news-loading">No matching holdings.</td></tr>';
+        holdingsBody.innerHTML = '<tr><td colspan="7" class="news-loading">No matching holdings.</td></tr>';
         return;
       }
+
+      // Group by household
+      const groups = {};
       for (const h of holdings) {
-        const tr = document.createElement('tr');
-        const hc = householdClass(h.household);
-        const hasPrices = h._curPrice > 0 && h.positions > 0;
-        const plClass = hasPrices ? (h._pl >= 0 ? 'day-positive' : 'day-negative') : '';
-        const curValClass = hasPrices ? (h._curPrice >= h.strike_price ? 'day-positive' : 'day-negative') : '';
-        const plStr = hasPrices ? ((h._pl >= 0 ? '+' : '') + fmtVal(h._pl)) : '<span class="na">--</span>';
-        tr.dataset.id = h.id;
-        tr.dataset.symbol = h.symbol;
-        tr.dataset.person = h.person_name;
-        tr.dataset.household = h.household;
-        tr.innerHTML = `
-          <td>${h.household ? '<span class="household-tag ' + hc + '">' + h.household + '</span>' : '<span class="na">--</span>'}</td>
-          <td>${h.person_name || '<span class="na">--</span>'}</td>
-          <td>${h.stock_name}</td>
-          <td class="symbol-cell">${h.symbol}</td>
-          <td class="num">${h.positions ? h.positions.toLocaleString() : '<span class="na">--</span>'}</td>
-          <td class="num">${h.positions && h.strike_price ? fmtVal(h._strikeValue) : '<span class="na">--</span>'}</td>
-          <td class="num ${curValClass}">${hasPrices ? fmtVal(h._currentValue) : '<span class="na">--</span>'}</td>
-          <td class="num ${plClass}">${plStr}</td>`;
-        tr.addEventListener('click', () => selectHoldingRow(tr));
-        holdingsBody.appendChild(tr);
+        const hh = h.household || 'Ungrouped';
+        if (!groups[hh]) groups[hh] = [];
+        groups[hh].push(h);
+      }
+
+      const sortedHouseholds = Object.keys(groups).sort();
+
+      for (const hh of sortedHouseholds) {
+        const members = groups[hh];
+        const isExpanded = expandedHouseholds.has(hh);
+        const hc = householdClass(hh);
+
+        // Aggregates
+        const totalStrike = members.reduce((s, h) => s + h._strikeValue, 0);
+        const totalCurrent = members.reduce((s, h) => s + h._currentValue, 0);
+        const totalPL = members.reduce((s, h) => s + h._pl, 0);
+        const plClass = totalCurrent > 0 ? (totalPL >= 0 ? 'day-positive' : 'day-negative') : '';
+
+        // Group header row — use real cells so values align with columns
+        const totalPositions = members.reduce((s, h) => s + h.positions, 0);
+        const groupTr = document.createElement('tr');
+        groupTr.className = 'hh-group-row';
+        groupTr.innerHTML = `
+          <td colspan="2">
+            <span class="hh-group-arrow ${isExpanded ? 'expanded' : ''}">&#x25B6;</span>
+            <span class="household-tag ${hc}">${hh}</span>
+            <span class="hh-group-summary">${members.length} holding${members.length !== 1 ? 's' : ''}</span>
+          </td>
+          <td></td>
+          <td class="num">${totalPositions.toLocaleString()}</td>
+          <td class="num">${fmtVal(totalStrike)}</td>
+          <td class="num">${fmtVal(totalCurrent)}</td>
+          <td class="num ${plClass}">${totalPL >= 0 ? '+' : ''}${fmtVal(totalPL)}</td>`;
+        groupTr.addEventListener('click', () => {
+          if (expandedHouseholds.has(hh)) expandedHouseholds.delete(hh);
+          else expandedHouseholds.add(hh);
+          refreshHoldingsView();
+        });
+        holdingsBody.appendChild(groupTr);
+
+        // Child rows (visible only when expanded)
+        if (isExpanded) {
+          for (const h of members) {
+            const tr = document.createElement('tr');
+            tr.className = 'hh-child-row';
+            const hasPrices = h._curPrice > 0 && h.positions > 0;
+            const plc = hasPrices ? (h._pl >= 0 ? 'day-positive' : 'day-negative') : '';
+            const curValClass = hasPrices ? (h._curPrice >= h.strike_price ? 'day-positive' : 'day-negative') : '';
+            const plStr = hasPrices ? ((h._pl >= 0 ? '+' : '') + fmtVal(h._pl)) : '<span class="na">--</span>';
+            tr.dataset.id = h.id;
+            tr.dataset.symbol = h.symbol;
+            tr.dataset.person = h.person_name;
+            tr.dataset.household = h.household;
+            tr.innerHTML = `
+              <td>${h.person_name || '<span class="na">--</span>'}</td>
+              <td>${h.stock_name}</td>
+              <td class="symbol-cell">${h.symbol}</td>
+              <td class="num">${h.positions ? h.positions.toLocaleString() : '<span class="na">--</span>'}</td>
+              <td class="num">${h.positions && h.strike_price ? fmtVal(h._strikeValue) : '<span class="na">--</span>'}</td>
+              <td class="num ${curValClass}">${hasPrices ? fmtVal(h._currentValue) : '<span class="na">--</span>'}</td>
+              <td class="num ${plc}">${plStr}</td>`;
+            tr.addEventListener('click', (e) => { e.stopPropagation(); selectHoldingRow(tr); });
+            holdingsBody.appendChild(tr);
+          }
+        }
       }
     }
 
@@ -949,6 +1367,7 @@
       if (prevHH) hfHousehold.value = prevHH;
 
       refreshHoldingsView();
+      renderDashAUM();
     }
     fetchHoldings();
 
@@ -1080,6 +1499,7 @@ Provide: Position Assessment, Trading Options, Hedging Strategies, Risk Factors,
           if (error) throw new Error(error);
           overlay.querySelector('.modal-body').innerHTML = '<pre>' + result.replace(/</g, '&lt;') + '</pre>';
           btn.textContent = 'Done'; btn.style.background = '#1a7f37';
+          fetchAlerts(); // refresh alerts panel
         } catch (e) { btn.textContent = 'Error'; btn.style.background = '#d1242f'; }
       };
     }
@@ -1125,7 +1545,7 @@ Provide: Position Assessment, Trading Options, Hedging Strategies, Risk Factors,
       chatMessages.innerHTML = '';
       const hist = chatHistory[activeAgent] || [];
       if (!hist.length) {
-        chatMessages.innerHTML = `<div class="chat-welcome"><strong>${agentLabels[activeAgent] || activeAgent} Agent</strong> — ${agentDescs[activeAgent] || ''}</div>`;
+        chatMessages.innerHTML = `<div class="chat-welcome"><strong>${agentLabels[activeAgent] || activeAgent} Agent</strong> — ${agentDescs[activeAgent] || ''}<br><span style="font-size:9px;color:#afb8c1">Messages auto-route to the right agent based on content</span></div>`;
         return;
       }
       for (const msg of hist) appendChatBubble(msg.role, msg.content, false);
@@ -1147,14 +1567,34 @@ Provide: Position Assessment, Trading Options, Hedging Strategies, Risk Factors,
       if (scroll !== false) chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
+    function detectAgent(text) {
+      const lower = text.toLowerCase();
+      if (/\b(alert|alarm|notify|trigger|price\s*(above|below)|set\s*alert)\b/.test(lower)) return 'alerts';
+      if (/\b(calendar|schedule|remind|appointment|meeting|event)\b/.test(lower)) return 'calendar';
+      if (/\b(research|sec\s*filing|edgar|company\s*profile|fundamentals)\b/.test(lower)) return 'research';
+      if (/\b(rebalanc|allocat|diversif|weight)\b/.test(lower)) return 'rebalance';
+      if (/\b(report|performance\s*summary|generate\s*report)\b/.test(lower)) return 'reporting';
+      if (/\b(sentiment|reddit|stocktwits|social\s*media|buzz)\b/.test(lower)) return 'sentiment';
+      return 'chat';
+    }
+
     async function sendChatMessage() {
       const text = chatInput.value.trim();
       if (!text || chatBusy) return;
       chatBusy = true; chatInput.value = ''; chatSendBtn.disabled = true;
 
+      // Auto-detect the right agent based on message content
+      const detectedAgent = detectAgent(text);
+      if (detectedAgent !== activeAgent) {
+        activeAgent = detectedAgent;
+        document.querySelectorAll('.chat-tab').forEach(t => {
+          t.classList.toggle('active', t.dataset.agent === activeAgent);
+        });
+      }
+
       if (!chatHistory[activeAgent]) chatHistory[activeAgent] = [];
       chatHistory[activeAgent].push({ role: 'user', content: text });
-      appendChatBubble('user', text);
+      renderChatHistory();
 
       const loadDiv = document.createElement('div');
       loadDiv.className = 'chat-msg loading';
@@ -1175,6 +1615,8 @@ Provide: Position Assessment, Trading Options, Hedging Strategies, Risk Factors,
         if (error) throw new Error(error);
         chatHistory[activeAgent].push({ role: 'assistant', content: result });
         appendChatBubble('assistant', result);
+        // Refresh alerts if alert agent was used
+        if (activeAgent === 'alerts') fetchAlerts();
       } catch (e) {
         const errMsg = 'Error: ' + e.message;
         chatHistory[activeAgent].push({ role: 'assistant', content: errMsg });
@@ -1187,24 +1629,6 @@ Provide: Position Assessment, Trading Options, Hedging Strategies, Risk Factors,
     chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); } });
 
     // ===== Settings Controls =====
-    const newSymIn = document.getElementById('new-symbol');
-    async function addSymbol() {
-      const sym = newSymIn.value.trim(); if (!sym) return;
-      await fetch('/api/symbols', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ symbol: sym }) });
-      newSymIn.value = ''; appendLog(`Added ${sym.toUpperCase()}.`);
-    }
-    document.getElementById('add-btn').onclick = addSymbol;
-    newSymIn.addEventListener('keydown', e => { if (e.key === 'Enter') addSymbol(); });
-
-    const intSel = document.getElementById('interval-select');
-    fetch('/api/interval').then(r => r.json()).then(({ intervalMs }) => {
-      const o = intSel.querySelector(`option[value="${intervalMs}"]`);
-      if (o) intSel.value = String(intervalMs);
-    });
-    intSel.onchange = () => {
-      fetch('/api/interval', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ intervalMs: +intSel.value }) });
-    };
-
     const nIntSel = document.getElementById('news-interval-select');
     fetch('/api/news-interval').then(r => r.json()).then(({ intervalMs }) => {
       const o = nIntSel.querySelector(`option[value="${intervalMs}"]`);
@@ -1216,6 +1640,9 @@ Provide: Position Assessment, Trading Options, Hedging Strategies, Risk Factors,
 
     // ===== Init =====
     connectSSE();
+    fetchAlerts();
+    // Re-fetch alerts periodically to pick up new ones
+    setInterval(fetchAlerts, 30000);
   </script>
 </body>
 </html>
